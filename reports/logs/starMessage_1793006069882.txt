@@ -1,0 +1,10 @@
+url: https://mail.proton.me/u/1/inbox#category=primary
+error: org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <button data-testid="item-star-false" type="button" class="starbutton relative item-star flex stop-propagation" aria-pressed="false" aria-describedby=":rhq:">...</button> is not clickable at point (313, 237). Other element would receive the click: <h2 class="mb-1 text-rg text-semibold">...</h2>
+  (Session info: chrome=156.0.8078.47)
+Build info: version: '4.51.0', revision: '35c5fab 35c5fab4a58fa5878edb255eb7747b04ca51a015'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '25.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [a061f993757d14c1f946fd39d3c59eda, clickElement {id=f.C884D0EE0D60CB4D0A7946934C4E1C06.d.3F2BF61D34349B337D4B93C36BB4DC42.e.1144}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 156.0.8078.47, chrome: {chromedriverVersion: 156.0.8078.47 (1d17a2e2ee14..., userDataDir: C:\Users\Prasanthi\Download...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:52688}, goog:processID: 11060, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:52688/devtoo..., se:cdpVersion: 156.0.8078.47, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[ChromeDriver: chrome on windows (a061f993757d14c1f946fd39d3c59eda)] -> xpath: //div[@data-testid='message-item:Inbox1793006028319']//button[@data-testid='item-star-false']]
+Session ID: a061f993757d14c1f946fd39d3c59eda
