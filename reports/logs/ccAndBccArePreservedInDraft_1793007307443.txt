@@ -1,0 +1,8 @@
+url: https://mail.proton.me/u/1/all-drafts/ynw-kFBD0VFXKxJVgGb0IOCNXd2ru0GzNBb1-AykN1Fc22GR37O0rdTMsdnAUzp16rmfcgwLaK1ND3sfFSJZnw==/XGCP6qf1tVsNtU0KtWoyg6IYch2XW4EoGk5vvOFok14Y7i1ar-pTEKIjpGXq3AVYIuHovAts4KoSiBZMUjnuEw==
+error: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for basePages.ComposeEmail$$Lambda/0x000000002323b070@273c947f
+(tried for 20 seconds with 500 milliseconds interval)
+Build info: version: '4.51.0', revision: '35c5fab 35c5fab4a58fa5878edb255eb7747b04ca51a015'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '25.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 156.0.8078.47, chrome: {chromedriverVersion: 156.0.8078.47 (1d17a2e2ee14..., userDataDir: C:\Users\Prasanthi\Download...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64682}, goog:processID: 7600, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:64682/devtoo..., se:cdpVersion: 156.0.8078.47, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 83dcb448ab42af9adca453db1c8b75b5

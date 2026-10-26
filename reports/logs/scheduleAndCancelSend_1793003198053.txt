@@ -1,0 +1,10 @@
+url: https://mail.proton.me/u/1/all-drafts
+error: org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <button class="button button-for-icon button-medium button-ghost-weak" aria-busy="false" data-testid="composer:delete-draft-button" type="button" aria-describedby=":rdq:">...</button> is not clickable at point (879, 639). Other element would receive the click: <span class="notification__content">...</span>
+  (Session info: chrome=156.0.8078.47)
+Build info: version: '4.51.0', revision: '35c5fab 35c5fab4a58fa5878edb255eb7747b04ca51a015'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '25.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [e67d1b83eb223c21674b3843018e5b56, clickElement {id=f.1F4196DC9405254C6AAA350E69320B8E.d.F9F77D817DEC19C728DA9348E35A213E.e.859}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 156.0.8078.47, chrome: {chromedriverVersion: 156.0.8078.47 (1d17a2e2ee14..., userDataDir: C:\Users\PRASAN~1\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54186}, goog:processID: 3300, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:54186/devtoo..., se:cdpVersion: 156.0.8078.47, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[ChromeDriver: chrome on windows (e67d1b83eb223c21674b3843018e5b56)] -> xpath: //button[@data-testid='composer:delete-draft-button']]
+Session ID: e67d1b83eb223c21674b3843018e5b56

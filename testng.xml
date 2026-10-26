@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Default suite. Choose a subset with groups: mvn test -Dgroups=smoke  (every PR)  or  -Dgroups=regression  (nightly).
+     Tests run sequentially on purpose: they share two mailboxes and the free plan allows only one filter. -->
+<suite name="ProtonMailWeb">
+  <test name="Proton Mail Web UI">
+    <packages>
+      <package name="tests"/>
+    </packages>
+  </test>
+</suite>
