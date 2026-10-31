@@ -23,6 +23,14 @@ public class LoginPage extends Waits {
             return;
         }
         waitForElementToVisible(username).sendKeys(name);
+        // newer sign-in page asks for the username first and shows the password field after "Continue"
+        if (!isElementPresent(password)) {
+            elementTobeClickable(signIn).click();
+            wait.until(d -> isElementPresent(password) || isElementPresent(errorText));
+            if (isElementPresent(errorText)) {
+                return;
+            }
+        }
         waitForElementToVisible(password).sendKeys(pwd);
         elementTobeClickable(signIn).click();
     }
