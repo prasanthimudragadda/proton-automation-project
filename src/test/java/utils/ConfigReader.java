@@ -22,7 +22,8 @@ public class ConfigReader {
     // an environment variable like PROTON_PASSWORD overrides the file value (useful for CI)
     public String getProperty(String key){
         String fromEnv = System.getenv(key.replace('.', '_').toUpperCase());
-        if (fromEnv != null) {
+        // GitHub Actions sets a variable to "" when its secret is missing, that must not hide the file value
+        if (fromEnv != null && !fromEnv.isBlank()) {
             return fromEnv;
         }
         return prop.getProperty(key);
