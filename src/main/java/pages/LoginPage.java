@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
     public LoginPage(WebDriver driver) {
@@ -15,14 +16,18 @@ public class LoginPage extends BasePage {
     private final By errorText = By.xpath("//div[@data-testid='login:error-block']");
 
     public void login(String name, String pwd) {
-        wait.until(d -> isPresent(username) || isPresent(inboxHeading));
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.presenceOfElementLocated(username),
+                ExpectedConditions.presenceOfElementLocated(inboxHeading)));
         if (isPresent(inboxHeading)) {
             return;
         }
         type(username, name);
         if (!isPresent(password)) {
             click(signIn);
-            wait.until(d -> isPresent(password) || isPresent(errorText));
+            wait.until(ExpectedConditions.or(
+                    ExpectedConditions.presenceOfElementLocated(password),
+                    ExpectedConditions.presenceOfElementLocated(errorText)));
             if (isPresent(errorText)) {
                 return;
             }

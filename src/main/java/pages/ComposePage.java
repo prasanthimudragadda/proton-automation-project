@@ -149,7 +149,7 @@ public class ComposePage extends BasePage {
     }
 
     public boolean hasSubject(String expected) {
-        return eventually(d -> expected.equals(d.findElement(subjectField).getDomProperty("value")));
+        return waitUntil(ExpectedConditions.attributeToBe(subjectField, "value", expected));
     }
 
     public String getBody() {
@@ -166,10 +166,7 @@ public class ComposePage extends BasePage {
     }
 
     public boolean recipientsContain(String text) {
-        return eventually(d -> {
-            String content = d.findElement(draftedRecipient).getDomProperty("textContent");
-            return content != null && content.contains(text);
-        });
+        return waitUntil(ExpectedConditions.attributeContains(draftedRecipient, "textContent", text));
     }
 
     public String getToChips() {
@@ -194,7 +191,7 @@ public class ComposePage extends BasePage {
 
     public void deleteDraft() {
         waitForClickable(deleteDraftButton);
-        clickWhenNotCovered(deleteDraftButton);
+        clickWithRetry(deleteDraftButton);
         click(confirmDeleteButton);
     }
 

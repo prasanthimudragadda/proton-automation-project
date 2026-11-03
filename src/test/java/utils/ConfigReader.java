@@ -23,11 +23,17 @@ public class ConfigReader {
             return fromEnv;
         }
         String value = prop.getProperty(key);
-        return value == null ? null : value.trim();
+        if (value == null) {
+            return null;
+        }
+        return value.trim();
     }
 
     public String getProperty(String key, String defaultValue) {
         String value = getProperty(key);
-        return value == null || value.isEmpty() ? defaultValue : value;
+        if (value == null || value.isEmpty()) {
+            return defaultValue;
+        }
+        return value;
     }
 }

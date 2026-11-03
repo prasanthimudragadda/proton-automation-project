@@ -22,7 +22,11 @@ public class ExcelReader {
             for (int i = 1; i <= rowCount; i++) {
                 Row row = sheet.getRow(i);
                 for (int j = 0; j < colCount; j++) {
-                    data[i - 1][j] = row == null ? "" : formatter.formatCellValue(row.getCell(j)).trim();
+                    if (row == null) {
+                        data[i - 1][j] = "";
+                    } else {
+                        data[i - 1][j] = formatter.formatCellValue(row.getCell(j)).trim();
+                    }
                 }
             }
             return data;

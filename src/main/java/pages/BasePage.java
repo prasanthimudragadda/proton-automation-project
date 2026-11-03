@@ -43,13 +43,13 @@ public abstract class BasePage {
         waitForVisible(locator).sendKeys(text);
     }
 
-    protected void clickWhenNotCovered(By target) {
-        new WebDriverWait(driver, DEFAULT_TIMEOUT)
-                .ignoring(ElementClickInterceptedException.class)
-                .until(d -> {
-                    d.findElement(target).click();
-                    return true;
-                });
+    protected void clickWithRetry(By locator) {
+        WebDriverWait retryWait = new WebDriverWait(driver, DEFAULT_TIMEOUT);
+        retryWait.ignoring(ElementClickInterceptedException.class);
+        retryWait.until(browser -> {
+            browser.findElement(locator).click();
+            return true;
+        });
     }
 
     protected void switchToFrame(By frame) {
@@ -70,12 +70,13 @@ public abstract class BasePage {
     }
 
     protected boolean isGone(By locator) {
-        return eventually(ExpectedConditions.invisibilityOfElementLocated(locator));
+        return waitUntil(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
-    protected boolean eventually(ExpectedCondition<Boolean> condition) {
+    protected boolean waitUntil(ExpectedCondition<?> condition) {
         try {
-            return Boolean.TRUE.equals(wait.until(condition));
+            wait.until(condition);
+            return true;
         } catch (TimeoutException e) {
             return false;
         }

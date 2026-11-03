@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SearchPage extends BasePage {
     public SearchPage(WebDriver driver) {
@@ -54,9 +55,7 @@ public class SearchPage extends BasePage {
     }
 
     public boolean isSearchBoxEmpty() {
-        return eventually(d -> {
-            String value = d.findElement(searchBox).getDomProperty("value");
-            return value == null || value.isEmpty();
-        });
+        WebElement box = waitForVisible(searchBox);
+        return waitUntil(ExpectedConditions.domPropertyToBe(box, "value", ""));
     }
 }

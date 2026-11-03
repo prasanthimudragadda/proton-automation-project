@@ -55,7 +55,12 @@ public class BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() {
-        WebDriver driver = DriverFactory.createChrome(useCleanSession() ? null : SESSION_PROFILE);
+        WebDriver driver;
+        if (useCleanSession()) {
+            driver = DriverFactory.createChrome(null);
+        } else {
+            driver = DriverFactory.createChrome(SESSION_PROFILE);
+        }
         DRIVER.set(driver);
         driver.get(mailUrl);
         lp = new LoginPage(driver);

@@ -2,7 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class FilterPage extends BasePage {
     public FilterPage(WebDriver driver) {
@@ -59,9 +59,8 @@ public class FilterPage extends BasePage {
 
     public boolean isFilterEnabled(String name, boolean expected) {
         By checkbox = By.xpath("//tr[.//*[normalize-space()='" + name + "']]//label[@data-testid='toggle-switch']//input");
-        return eventually(d -> {
-            WebElement box = d.findElement(checkbox);
-            return box.isSelected() == expected && !"true".equals(box.getDomAttribute("aria-busy"));
-        });
+        boolean rightState = waitUntil(ExpectedConditions.elementSelectionStateToBe(checkbox, expected));
+        boolean saved = waitUntil(ExpectedConditions.not(ExpectedConditions.attributeToBe(checkbox, "aria-busy", "true")));
+        return rightState && saved;
     }
 }
