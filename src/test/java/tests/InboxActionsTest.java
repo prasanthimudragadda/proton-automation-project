@@ -14,10 +14,6 @@ public class InboxActionsTest extends BaseTest {
         return sendMailToSelf("Inbox");
     }
 
-    private void loginToInbox() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
-    }
 
     private String sendMailToSelf(String prefix) {
         String subject = prefix + System.currentTimeMillis();

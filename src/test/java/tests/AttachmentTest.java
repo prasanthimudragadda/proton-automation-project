@@ -11,10 +11,6 @@ public class AttachmentTest extends BaseTest {
     private static final String FILE_NAME = "sample.txt";
     private static final String FILE_PATH = new File("src/test/resources/testdata/" + FILE_NAME).getAbsolutePath();
 
-    private void loginToInbox() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
-    }
 
     @Test(groups = "regression")
     public void attachAndRemoveFile() {

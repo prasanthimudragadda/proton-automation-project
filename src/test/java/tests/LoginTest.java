@@ -29,16 +29,14 @@ public class LoginTest extends BaseTest {
 
     @Test(groups = "regression")
     public void signOut() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+        loginToInbox();
         hp.signOut();
         Assert.assertTrue(hp.isSignInPageDisplayed(), "Sign in page should be shown after sign out");
     }
 
     @Test(groups = "regression")
     public void sessionStaysAfterRefresh() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+        loginToInbox();
         getDriver().navigate().refresh();
         Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should still be shown after a page refresh");
         Assert.assertTrue(getDriver().getCurrentUrl().contains("mail.proton.me"),

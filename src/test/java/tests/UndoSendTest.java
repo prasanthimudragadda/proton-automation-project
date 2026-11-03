@@ -11,8 +11,7 @@ public class UndoSendTest extends BaseTest {
     @Test(groups = "regression")
     public void undoSend() {
         String subject = "UndoSend" + System.currentTimeMillis();
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+        loginToInbox();
         cp.openComposer();
         cp.setRecipient(recipient);
         cp.setSubject(subject);

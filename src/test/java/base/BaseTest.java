@@ -1,6 +1,7 @@
 package base;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -85,6 +86,12 @@ public class BaseTest {
 
     protected void openMailbox() {
         getDriver().get(mailUrl);
+    }
+
+    // common first step of most tests: sign in with account 1 (or reuse the signed in profile) and check the inbox
+    protected void loginToInbox() {
+        lp.login(username, password);
+        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
     }
 
     @AfterMethod(alwaysRun = true)

@@ -16,7 +16,7 @@ Detailed test cases are in `docs/TestCases.csv` (46 cases, 27 automated test met
 ## 3. Risks
 | Risk | Impact | How it is handled |
 |------|--------|-------------------|
-| Proton UI uses dynamic content, iframe for email body | Flaky locators | `data-testid` locators and explicit waits, iframe switch handled in `ComposeEmail` |
+| Proton UI uses dynamic content, iframe for email body | Flaky locators | `data-testid` locators and explicit waits, iframe switch handled in `ComposePage` |
 | Mail delivery is asynchronous | Test checks too early | Wait for the message row to appear instead of `Thread.sleep` |
 | CAPTCHA / human verification after many logins | Login blocked | Few logins per test, manual fallback, see README troubleshooting |
 | Test data pile up in mailbox | Slower mailbox over time | Unique subjects, filter test cleans its filter, mailbox can be cleaned manually |

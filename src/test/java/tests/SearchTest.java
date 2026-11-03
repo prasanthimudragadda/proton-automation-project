@@ -6,10 +6,6 @@ import org.testng.annotations.Test;
 
 public class SearchTest extends BaseTest {
 
-    private void loginToInbox() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
-    }
 
     @Test(groups = {"smoke", "regression"})
     public void searchByKeyword() {

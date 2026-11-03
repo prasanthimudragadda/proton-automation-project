@@ -24,8 +24,14 @@ public class LoginDataDrivenTest extends BaseTest {
         LoginCase(Object[] row) {
             this.user = (String) row[0];
             this.pwd = (String) row[1];
-            this.expectSuccess = "success".equalsIgnoreCase((String) row[2]);
             this.description = (String) row[3];
+            String expected = (String) row[2];
+            // only two values are allowed: a typo like "sucess" must not silently turn a row into a negative test
+            if (!"success".equalsIgnoreCase(expected) && !"error".equalsIgnoreCase(expected)) {
+                throw new IllegalArgumentException("Expected column must be 'success' or 'error', but was '"
+                        + expected + "' in row: " + description);
+            }
+            this.expectSuccess = "success".equalsIgnoreCase(expected);
         }
 
         @Override

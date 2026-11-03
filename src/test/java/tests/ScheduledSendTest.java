@@ -12,8 +12,7 @@ public class ScheduledSendTest extends BaseTest {
     @Test(groups = "regression")
     public void scheduleAndCancelSend() {
         String subject = "Scheduled" + System.currentTimeMillis();
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+        loginToInbox();
 
         cp.openComposer();
         cp.setRecipient(email);

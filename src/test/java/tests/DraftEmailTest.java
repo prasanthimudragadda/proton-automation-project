@@ -12,8 +12,7 @@ public class DraftEmailTest extends BaseTest {
 
     // creates a draft by closing the composer and checks the "Draft saved." toast
     private void createDraft(String subject) {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+        loginToInbox();
         cp.openComposer();
         cp.setRecipient(recipient);
         cp.setSubject(subject);

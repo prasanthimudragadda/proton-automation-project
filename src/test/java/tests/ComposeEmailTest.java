@@ -19,10 +19,6 @@ public class ComposeEmailTest extends BaseTest {
                 "");
     }
 
-    private void loginToInbox() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
-    }
 
     @Test(groups = {"smoke", "regression"})
     public void composeEmail() {
@@ -45,8 +41,12 @@ public class ComposeEmailTest extends BaseTest {
         cp.setSubject("No recipient " + System.currentTimeMillis());
         cp.setBody(body());
         cp.send();
+        Assert.assertTrue(cp.isRecipientMissingShown(),
+                "'Recipient missing - Please add at least one recipient.' dialog should be shown");
         Assert.assertTrue(cp.isMessageNotSent(), "A mail without recipient must not be sent");
+        cp.closeRecipientMissingDialog();
         Assert.assertTrue(cp.isComposerOpen(), "Composer should stay open so the user can add a recipient");
+        discardDraft();
     }
 
     @Test(groups = "regression")
@@ -59,6 +59,17 @@ public class ComposeEmailTest extends BaseTest {
         cp.send();
         Assert.assertTrue(cp.isMessageNotSent(), "A mail to an invalid address must not be sent");
         Assert.assertTrue(cp.isComposerOpen(), "Composer should stay open so the user can fix the address");
+        discardDraft();
+    }
+
+    // the unsent mail stays in the open composer as a draft; delete it so drafts do not pile up in the mailbox.
+    // Best effort: the negative check above already passed, a cleanup problem must not change the test result.
+    private void discardDraft() {
+        try {
+            cp.deleteDraft();
+        } catch (RuntimeException e) {
+            System.err.println("Cleanup: could not delete the draft of the unsent mail: " + e.getMessage());
+        }
     }
 
     // nothing is sent: the three recipient fields are filled, saved as a draft and checked after reopening

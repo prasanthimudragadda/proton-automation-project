@@ -43,6 +43,9 @@ public class ComposePage extends BasePage {
     private final By bccChips = By.xpath("//div[@data-testid='composer:bcc-field']//div[@data-testid='composer-addresses-item']");
     private final By scheduleDropdown = By.xpath("//button[@data-testid='composer:scheduled-send:open-dropdown']");
     private final By scheduleTomorrow = By.xpath("//button[@data-testid='composer:schedule-send:tomorrow']");
+    // validation dialog after Send with an empty To field: "Recipient missing / Please add at least one recipient."
+    private final By recipientMissingDialog = By.xpath("//*[normalize-space()='Please add at least one recipient.']");
+    private final By gotItButton = By.xpath("//button[normalize-space()='Got it']");
 
     private By attachmentItem(String fileName, String action) {
         return By.xpath("//button[@data-testid='attachment-item:" + fileName + "--" + action + "']");
@@ -137,6 +140,16 @@ public class ComposePage extends BasePage {
     // A short window is enough: when sending works the toast shows within about a second.
     public boolean isMessageNotSent() {
         return !isVisible(notificationMessage, Duration.ofSeconds(3));
+    }
+
+    public boolean isRecipientMissingShown() {
+        return isVisible(recipientMissingDialog);
+    }
+
+    // closes the validation dialog; it covers the composer buttons while it is open
+    public void closeRecipientMissingDialog() {
+        click(gotItButton);
+        isGone(gotItButton);
     }
 
     public boolean isComposerOpen() {

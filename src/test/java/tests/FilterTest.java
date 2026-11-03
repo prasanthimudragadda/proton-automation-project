@@ -21,8 +21,7 @@ public class FilterTest extends BaseTest {
     }
 
     private void loginAndCreateFilter() {
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+        loginToInbox();
         fp.openFilters(mailUrl);
         fp.createStarFilter(filterName, keyword);
         filterCreated = true;
