@@ -1,2 +1,0 @@
-url: https://mail.proton.me/u/1/inbox#category=primary
-error: java.lang.AssertionError: Receiver inbox should be shown after login expected [true] but found [false]
