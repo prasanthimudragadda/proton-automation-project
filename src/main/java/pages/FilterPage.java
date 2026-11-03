@@ -4,9 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-// Settings > Filters (custom filter rules)
 public class FilterPage extends BasePage {
-
     public FilterPage(WebDriver driver) {
         super(driver);
     }
@@ -19,19 +17,16 @@ public class FilterPage extends BasePage {
     private final By markAsStarred = By.xpath("//label[normalize-space()='Starred']");
     private final By saveButton = By.xpath("//button[@type='submit' and normalize-space()='Save']");
     private final By deleteMenuItem = By.xpath("//button[normalize-space()='Delete']");
-    // in the "Delete filter?" dialog this is a plain button (type="button"), not a submit button
     private final By confirmDeleteButton = By.xpath("(//dialog | //*[@role='dialog'])//button[normalize-space()='Delete']");
 
     private By filterRow(String name) {
         return By.xpath("//tr[.//*[normalize-space()='" + name + "']]");
     }
 
-    // mailUrl is the mailbox URL from config, e.g. https://account.proton.me/mail
     public void openFilters(String mailUrl) {
         driver.get(mailUrl + "/filters");
     }
 
-    // filter: if subject contains the keyword -> mark as starred
     public void createStarFilter(String name, String keyword) {
         click(addFilterButton);
         type(filterName, name);
@@ -52,7 +47,6 @@ public class FilterPage extends BasePage {
         return isGone(filterRow(name));
     }
 
-    // last button in the row is the "..." actions menu
     public void deleteFilter(String name) {
         click(By.xpath("(//tr[.//*[normalize-space()='" + name + "']]//button)[last()]"));
         click(deleteMenuItem);
@@ -63,7 +57,6 @@ public class FilterPage extends BasePage {
         click(By.xpath("//tr[.//*[normalize-space()='" + name + "']]//label[@data-testid='toggle-switch']"));
     }
 
-    // waits until the switch shows the expected state and the save request has finished
     public boolean isFilterEnabled(String name, boolean expected) {
         By checkbox = By.xpath("//tr[.//*[normalize-space()='" + name + "']]//label[@data-testid='toggle-switch']//input");
         return eventually(d -> {

@@ -5,9 +5,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class UndoSendTest extends BaseTest {
-
-    // async flow: the Undo toast stays only a few seconds, so it is clicked as soon as an explicit wait finds it
-    // (no sleep). Then the final state is checked: composer back with the same content, and nothing in Sent.
     @Test(groups = "regression")
     public void undoSend() {
         String subject = "UndoSend" + System.currentTimeMillis();

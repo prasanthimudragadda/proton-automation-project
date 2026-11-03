@@ -11,10 +11,7 @@ import org.testng.ITestResult;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-// on every failure: screenshot in reports/screenshots and page URL + error in reports/logs (same file name)
-// runs before @AfterMethod, so the browser is still open on the failing page
 public class TestListener implements ITestListener {
-
     @Override
     public void onTestFailure(ITestResult result) {
         WebDriver driver = BaseTest.getDriver();
@@ -32,7 +29,6 @@ public class TestListener implements ITestListener {
             File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(src, new File("reports/screenshots/" + name + ".png"));
         } catch (Exception e) {
-            // evidence is best effort: never let it hide the real test failure
             System.err.println("Could not save failure evidence for " + name + ": " + e);
         }
     }

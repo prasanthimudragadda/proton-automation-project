@@ -7,12 +7,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class FilterTest extends BaseTest {
-
     private String filterName;
     private String keyword;
     private boolean filterCreated = false;
 
-    // fresh names for every test: Proton rejects a filter name that was used a moment ago by the previous test
     @BeforeMethod(alwaysRun = true)
     public void newFilterNames() {
         long id = System.currentTimeMillis();
@@ -32,7 +30,6 @@ public class FilterTest extends BaseTest {
         loginAndCreateFilter();
         Assert.assertTrue(fp.isFilterDisplayed(filterName), "New filter should be listed in Settings > Filters");
 
-        // matching mail should be starred, so it shows up in Starred
         openMailbox();
         String matching = keyword + " mail";
         cp.sendEmail(email, matching, "this subject has the filter keyword");
@@ -40,8 +37,6 @@ public class FilterTest extends BaseTest {
         Assert.assertTrue(ip.isMessageDisplayed(matching), "Mail with the keyword should be starred by the filter");
     }
 
-    // negative and state checks on the same rule: a non matching mail is not starred, and once the filter is
-    // switched off even a matching mail is not starred
     @Test(groups = "regression")
     public void filterIgnoresNonMatchingAndDisabled() {
         loginAndCreateFilter();
@@ -66,7 +61,6 @@ public class FilterTest extends BaseTest {
         Assert.assertTrue(ip.isMessageGone(whileDisabled), "A disabled filter must not star a matching mail");
     }
 
-    // free account allows only one filter, so always remove it after the test (runs before BaseTest.tearDown)
     @AfterMethod(alwaysRun = true)
     public void deleteFilter() {
         if (filterCreated) {

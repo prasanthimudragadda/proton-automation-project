@@ -21,13 +21,8 @@ import java.io.IOException;
 
 @Listeners(TestListener.class)
 public class BaseTest {
-
-    // one driver per thread: tests never share a driver object, which is the first step to running them in parallel
     private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
-    // Proton throttles repeated logins (a login per test made the suite fail after ~12 tests). Normal tests therefore
-    // share one Chrome profile: the first test signs in, the next ones start already signed in ("Keep me signed in").
-    // Tests about login/logout override useCleanSession() and get a brand new, signed out browser.
     private static final String SESSION_PROFILE = new File("target/chrome-profile").getAbsolutePath();
 
     protected LoginPage lp;
@@ -79,7 +74,6 @@ public class BaseTest {
         return false;
     }
 
-    // a second, signed out browser, e.g. for the receiver in the two-account test
     protected WebDriver newCleanBrowser() {
         return DriverFactory.createChrome(null);
     }
@@ -88,7 +82,6 @@ public class BaseTest {
         getDriver().get(mailUrl);
     }
 
-    // common first step of most tests: sign in with account 1 (or reuse the signed in profile) and check the inbox
     protected void loginToInbox() {
         lp.login(username, password);
         Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");

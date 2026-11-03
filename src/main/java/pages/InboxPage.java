@@ -4,9 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
-// mailbox: folder navigation, message list rows and toolbar actions
 public class InboxPage extends BasePage {
-
     public InboxPage(WebDriver driver) {
         super(driver);
     }
@@ -34,14 +32,10 @@ public class InboxPage extends BasePage {
         return By.xpath("//div[@data-testid='message-item:" + subject + "']");
     }
 
-    // an unread row carries the css class "unread"
     private By unreadRow(String subject) {
         return By.xpath("//div[@data-testid='message-item:" + subject + "' and contains(concat(' ', normalize-space(@class), ' '), ' unread ')]");
     }
 
-    // ---------- folders ----------
-
-    // Archive and Trash are hidden under "More" until it is expanded
     private void openFolder(By folder) {
         if (!isPresent(folder)) {
             click(moreFolders);
@@ -69,7 +63,6 @@ public class InboxPage extends BasePage {
         openFolder(trashFolder);
     }
 
-    // the Scheduled link appears a few seconds after scheduling and disappears when nothing is scheduled
     public void openScheduled() {
         click(scheduledFolder);
     }
@@ -78,9 +71,6 @@ public class InboxPage extends BasePage {
         click(By.xpath("//li[@data-testid='sidebar-label:" + labelName + "']//a"));
     }
 
-    // ---------- message rows ----------
-
-    // long timeout: a freshly sent mail appears only after Proton's next list refresh
     public boolean isMessageDisplayed(String subject) {
         return isVisible(messageRow(subject), MAIL_DELIVERY_TIMEOUT);
     }
@@ -105,7 +95,6 @@ public class InboxPage extends BasePage {
         click(messageRow(subject));
     }
 
-    // a one-time "Make your inbox your own" popover can cover the list and swallow clicks
     public void dismissOnboardingPopup() {
         if (isPresent(onboardingNotNow)) {
             click(onboardingNotNow);
@@ -114,22 +103,18 @@ public class InboxPage extends BasePage {
     }
 
     public void selectMessage(String subject) {
-        // the real input has opacity 0 (Selenium sees it as not visible), the label around it is what the user clicks
         By checkbox = By.xpath("//div[@data-testid='message-item:" + subject + "']//label[contains(@class,'item-checkbox-label')]");
         waitForVisible(messageRow(subject));
         dismissOnboardingPopup();
         click(checkbox);
     }
 
-    // the star icon shows only when the mouse is on the row
     public void starMessage(String subject) {
         dismissOnboardingPopup();
         By star = By.xpath("//div[@data-testid='message-item:" + subject + "']//button[@data-testid='item-star-false']");
         new Actions(driver).moveToElement(waitForVisible(messageRow(subject))).perform();
         click(star);
     }
-
-    // ---------- toolbar actions on the selected messages ----------
 
     public void archiveSelected() {
         click(archiveButton);
@@ -143,7 +128,6 @@ public class InboxPage extends BasePage {
         click(moveToInboxButton);
     }
 
-    // the toolbar shows "mark as read" for unread messages and "mark as unread" for read ones
     public void markSelectedAsRead() {
         click(markReadButton);
     }
@@ -155,18 +139,13 @@ public class InboxPage extends BasePage {
     public void applyLabel(String labelName) {
         click(labelAsButton);
         click(By.xpath("//label[@data-testid='label-dropdown:label-" + labelName + "']"));
-        // current Proton versions apply a ticked label to the selected message at once and close the dropdown;
-        // older ones kept it open with an "Apply" button
         isGone(applyLabelButton);
     }
-
-    // ---------- scheduled send ----------
 
     public String getScheduleBannerText() {
         return waitForVisible(scheduleBanner).getText();
     }
 
-    // "Edit" on the banner cancels the schedule: the message moves to Drafts and the composer opens
     public void cancelScheduledSend() {
         click(scheduleEditButton);
         click(editDraftButton);

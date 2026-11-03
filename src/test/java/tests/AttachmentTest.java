@@ -7,10 +7,8 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 public class AttachmentTest extends BaseTest {
-
     private static final String FILE_NAME = "sample.txt";
     private static final String FILE_PATH = new File("src/test/resources/testdata/" + FILE_NAME).getAbsolutePath();
-
 
     @Test(groups = "regression")
     public void attachAndRemoveFile() {

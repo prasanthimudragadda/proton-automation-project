@@ -10,11 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class LoginDataDrivenTest extends BaseTest {
-
     private static final String DATA_FILE = "src/test/resources/testdata/LoginData.xlsx";
 
-    // One Excel row. TestNG prints data provider values in the test name and in every report, so toString()
-    // shows only the description: the password never ends up in a report or a CI log.
     public static final class LoginCase {
         final String user;
         final String pwd;
@@ -26,7 +23,6 @@ public class LoginDataDrivenTest extends BaseTest {
             this.pwd = (String) row[1];
             this.description = (String) row[3];
             String expected = (String) row[2];
-            // only two values are allowed: a typo like "sucess" must not silently turn a row into a negative test
             if (!"success".equalsIgnoreCase(expected) && !"error".equalsIgnoreCase(expected)) {
                 throw new IllegalArgumentException("Expected column must be 'success' or 'error', but was '"
                         + expected + "' in row: " + description);
@@ -40,16 +36,13 @@ public class LoginDataDrivenTest extends BaseTest {
         }
     }
 
-    // login, logout and credential checks need a browser that is not signed in yet
     @Override
     protected boolean useCleanSession() {
         return true;
     }
 
-    // each row of LoginData.xlsx = one test run (Username, Password, Expected, Description)
     @DataProvider(name = "loginData")
     public Object[][] loginData() throws IOException {
-        // the sheet holds real passwords and is not committed, so without it this test simply has no rows
         if (!new File(DATA_FILE).exists()) {
             return new Object[0][0];
         }

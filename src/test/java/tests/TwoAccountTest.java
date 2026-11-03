@@ -10,8 +10,6 @@ import pages.InboxPage;
 import pages.LoginPage;
 
 public class TwoAccountTest extends BaseTest {
-
-    // end to end: account 1 sends a mail, account 2 logs in with a second browser and finds it in its inbox
     @Test(groups = "regression")
     public void senderToReceiver() {
         String receiverName = config.getProperty("proton.recipient.username");

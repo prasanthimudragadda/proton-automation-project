@@ -10,13 +10,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class ExcelReader {
-
-    // reads every row of the sheet (first row is the header) and returns it for the DataProvider
     public static Object[][] getData(String filePath, String sheetName) throws IOException {
         DataFormatter formatter = new DataFormatter();
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = WorkbookFactory.create(fis)) {
-
             Sheet sheet = workbook.getSheet(sheetName);
             int rowCount = sheet.getLastRowNum();
             int colCount = sheet.getRow(0).getLastCellNum();

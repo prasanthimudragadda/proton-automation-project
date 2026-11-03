@@ -5,15 +5,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class InboxActionsTest extends BaseTest {
-
     private static final String BODY = "Inbox actions test mail";
 
-    // logs in and sends a mail to the own mailbox, so every test has its own fresh message in the inbox
     private String receiveNewMail() {
         loginToInbox();
         return sendMailToSelf("Inbox");
     }
-
 
     private String sendMailToSelf(String prefix) {
         String subject = prefix + System.currentTimeMillis();

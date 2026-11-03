@@ -6,12 +6,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class SearchPage extends BasePage {
-
     public SearchPage(WebDriver driver) {
         super(driver);
     }
 
-    // the box in the top bar is read-only: clicking it opens a panel with the real input (id=search-keyword)
     private final By searchBox = By.xpath("//input[@data-testid='search-keyword']");
     private final By keywordInput = By.id("search-keyword");
     private final By moreOptions = By.xpath("//button[@data-testid='advanced-search:show-more']");
@@ -29,13 +27,11 @@ public class SearchPage extends BasePage {
         type(keywordInput, keyword, Keys.ENTER);
     }
 
-    // keyword + sender together
     public void advancedSearch(String keyword, String sender) {
         openSearchPanel();
         WebElement keywordField = waitForVisible(keywordInput);
         keywordField.clear();
         keywordField.sendKeys(keyword);
-        // the panel remembers it was expanded: "More search options" is then replaced by "Fewer search options"
         if (!isPresent(senderInput)) {
             click(moreOptions);
         }
@@ -57,7 +53,6 @@ public class SearchPage extends BasePage {
         return isGone(noResultText);
     }
 
-    // the clear button empties the search box; the result list stays until the user leaves the search
     public boolean isSearchBoxEmpty() {
         return eventually(d -> {
             String value = d.findElement(searchBox).getDomProperty("value");

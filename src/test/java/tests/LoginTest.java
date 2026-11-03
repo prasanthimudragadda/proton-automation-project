@@ -5,8 +5,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class LoginTest extends BaseTest {
-
-    // login, logout and credential checks need a browser that is not signed in yet
     @Override
     protected boolean useCleanSession() {
         return true;
@@ -22,7 +20,6 @@ public class LoginTest extends BaseTest {
     public void loginWithInValidCred() {
         lp.login(username, incorrectPwd);
         Assert.assertTrue(lp.isErrorDisplayed(), "Login error should be shown for a wrong password");
-        // instant URL check instead of waiting 20 s for an inbox that should never appear
         Assert.assertTrue(getDriver().getCurrentUrl().contains("account.proton.me"),
                 "User should stay on the sign-in page, but URL is " + getDriver().getCurrentUrl());
     }

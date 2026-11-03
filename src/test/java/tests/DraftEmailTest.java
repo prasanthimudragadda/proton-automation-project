@@ -7,10 +7,8 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class DraftEmailTest extends BaseTest {
-
     private final String body = "test" + UUID.randomUUID().toString().substring(0, 8);
 
-    // creates a draft by closing the composer and checks the "Draft saved." toast
     private void createDraft(String subject) {
         loginToInbox();
         cp.openComposer();
@@ -31,7 +29,6 @@ public class DraftEmailTest extends BaseTest {
         Assert.assertEquals(cp.getSubject(), subject, "Reopened draft should keep the subject");
         Assert.assertTrue(cp.getBody().contains(body), "Reopened draft should keep the body text " + body);
 
-        // clean up so drafts do not pile up in the mailbox
         cp.deleteDraft();
         Assert.assertTrue(ip.isMessageGone(subject), "Deleted draft should leave the Drafts list");
     }
