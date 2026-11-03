@@ -6,99 +6,100 @@ import org.testng.annotations.Test;
 
 public class InboxActionsTest extends BaseTest {
 
-    String body = "Inbox actions test mail";
+    private static final String BODY = "Inbox actions test mail";
 
-    // sends a mail to own mailbox so every test has its own fresh message in the inbox
-    private String receiveNewMail(){
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed());
+    // logs in and sends a mail to the own mailbox, so every test has its own fresh message in the inbox
+    private String receiveNewMail() {
+        loginToInbox();
         return sendMailToSelf("Inbox");
     }
 
-    // needs a logged in session, used directly by tests that need more than one message
-    private String sendMailToSelf(String prefix){
+    private void loginToInbox() {
+        lp.login(username, password);
+        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
+    }
+
+    private String sendMailToSelf(String prefix) {
         String subject = prefix + System.currentTimeMillis();
-        ce.sendEmail(email, subject, body);
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        cp.sendEmail(email, subject, BODY);
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Self-sent mail '" + subject + "' should arrive in Inbox");
         return subject;
     }
 
     @Test(groups = "regression")
-    public void markAsReadAndUnread(){
+    public void markAsReadAndUnread() {
         String subject = receiveNewMail();
-        // a new mail is unread
-        Assert.assertTrue(ip.isMessageUnread(subject));
+        Assert.assertTrue(ip.isMessageUnread(subject), "A new mail should be unread");
         ip.selectMessage(subject);
         ip.markSelectedAsRead();
-        Assert.assertTrue(ip.isMessageRead(subject));
+        Assert.assertTrue(ip.isMessageRead(subject), "Mail should be read after 'mark as read'");
         ip.markSelectedAsUnread();
-        Assert.assertTrue(ip.isMessageUnread(subject));
+        Assert.assertTrue(ip.isMessageUnread(subject), "Mail should be unread again after 'mark as unread'");
     }
 
     @Test(groups = "regression")
-    public void restoreFromTrash(){
+    public void restoreFromTrash() {
         String subject = receiveNewMail();
         ip.selectMessage(subject);
         ip.trashSelected();
-        Assert.assertTrue(ip.isMessageGone(subject));
+        Assert.assertTrue(ip.isMessageGone(subject), "Trashed mail should leave the Inbox");
         ip.openTrash();
         ip.selectMessage(subject);
         ip.restoreSelected();
-        Assert.assertTrue(ip.isMessageGone(subject));
+        Assert.assertTrue(ip.isMessageGone(subject), "Restored mail should leave Trash");
         ip.openInbox();
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Restored mail should be back in Inbox");
     }
 
     @Test(groups = "regression")
-    public void bulkMoveToTrash(){
-        lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed());
+    public void bulkMoveToTrash() {
+        loginToInbox();
         String first = sendMailToSelf("BulkA");
         String second = sendMailToSelf("BulkB");
         ip.selectMessage(first);
         ip.selectMessage(second);
         ip.trashSelected();
-        Assert.assertTrue(ip.isMessageGone(first));
-        Assert.assertTrue(ip.isMessageGone(second));
+        Assert.assertTrue(ip.isMessageGone(first), "First selected mail should leave the Inbox");
+        Assert.assertTrue(ip.isMessageGone(second), "Second selected mail should leave the Inbox");
         ip.openTrash();
-        Assert.assertTrue(ip.isMessageDisplayed(first));
-        Assert.assertTrue(ip.isMessageDisplayed(second));
+        Assert.assertTrue(ip.isMessageDisplayed(first), "First selected mail should be in Trash");
+        Assert.assertTrue(ip.isMessageDisplayed(second), "Second selected mail should be in Trash");
     }
 
     @Test(groups = "regression")
-    public void starMessage(){
+    public void starMessage() {
         String subject = receiveNewMail();
         ip.starMessage(subject);
         ip.openStarred();
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Starred mail should be listed in Starred");
     }
 
     @Test(groups = "regression")
-    public void archiveMessage(){
+    public void archiveMessage() {
         String subject = receiveNewMail();
         ip.selectMessage(subject);
         ip.archiveSelected();
-        Assert.assertTrue(ip.isMessageGone(subject));
+        Assert.assertTrue(ip.isMessageGone(subject), "Archived mail should leave the Inbox");
         ip.openArchive();
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Archived mail should be listed in Archive");
     }
 
     @Test(groups = "regression")
-    public void deleteMessage(){
+    public void deleteMessage() {
         String subject = receiveNewMail();
         ip.selectMessage(subject);
         ip.trashSelected();
-        Assert.assertTrue(ip.isMessageGone(subject));
+        Assert.assertTrue(ip.isMessageGone(subject), "Trashed mail should leave the Inbox");
         ip.openTrash();
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Trashed mail should be listed in Trash");
     }
 
     @Test(groups = "regression")
-    public void applyLabel(){
+    public void applyLabel() {
         String subject = receiveNewMail();
         ip.selectMessage(subject);
         ip.applyLabel(label);
         ip.openLabel(label);
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Labelled mail should be listed under label '" + label + "'");
     }
 }

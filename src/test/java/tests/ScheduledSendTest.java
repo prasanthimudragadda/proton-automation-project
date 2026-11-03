@@ -10,30 +10,31 @@ public class ScheduledSendTest extends BaseTest {
     // so only the scheduled STATE is checked and the schedule is cancelled again. The real delivery at 08:00
     // is left to manual testing (see docs/TestStrategy.md). The mail goes to the own mailbox.
     @Test(groups = "regression")
-    public void scheduleAndCancelSend(){
+    public void scheduleAndCancelSend() {
         String subject = "Scheduled" + System.currentTimeMillis();
         lp.login(username, password);
-        Assert.assertTrue(hp.isInboxDisplayed());
+        Assert.assertTrue(hp.isInboxDisplayed(), "Inbox should be shown after login");
 
-        ce.openComposer();
-        ce.setRecipient(email);
-        ce.setSubject(subject);
-        ce.setBody("this mail is scheduled for tomorrow");
-        ce.scheduleForTomorrow();
+        cp.openComposer();
+        cp.setRecipient(email);
+        cp.setSubject(subject);
+        cp.setBody("this mail is scheduled for tomorrow");
+        cp.scheduleForTomorrow();
 
         // the Scheduled folder appears after the message is scheduled and holds the mail
         ip.openScheduled();
-        Assert.assertTrue(ip.isMessageDisplayed(subject));
+        Assert.assertTrue(ip.isMessageDisplayed(subject), "Scheduled mail should be listed in Scheduled");
         ip.openMessage(subject);
-        Assert.assertTrue(ip.getScheduleBannerText().contains("will be sent"));
+        String banner = ip.getScheduleBannerText();
+        Assert.assertTrue(banner.contains("will be sent"), "Schedule banner should say 'will be sent', but was: " + banner);
 
         // cancelling moves it back to Drafts, the Scheduled folder is gone because nothing is scheduled any more
         ip.cancelScheduledSend();
-        Assert.assertEquals(ce.getSubject(), subject);
-        Assert.assertTrue(ip.isScheduledFolderGone());
+        Assert.assertTrue(cp.hasSubject(subject), "Cancelled mail should open as a draft with the same subject");
+        Assert.assertTrue(ip.isScheduledFolderGone(), "Scheduled folder should disappear when nothing is scheduled");
 
         // clean up the draft
-        ce.deleteDraft();
-        Assert.assertTrue(ip.isMessageGone(subject));
+        cp.deleteDraft();
+        Assert.assertTrue(ip.isMessageGone(subject), "Cleanup: draft should be deleted");
     }
 }

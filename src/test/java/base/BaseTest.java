@@ -1,19 +1,18 @@
 package base;
 
-import basePages.ComposeEmail;
-import basePages.FilterPage;
-import basePages.HomePage;
-import basePages.InboxPage;
-import basePages.LoginPage;
-import basePages.SearchPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
+import pages.ComposePage;
+import pages.FilterPage;
+import pages.HomePage;
+import pages.InboxPage;
+import pages.LoginPage;
+import pages.SearchPage;
 import utils.ConfigReader;
+import utils.DriverFactory;
 import utils.TestListener;
 
 import java.io.File;
@@ -22,15 +21,23 @@ import java.io.IOException;
 @Listeners(TestListener.class)
 public class BaseTest {
 
-    public WebDriver driver;
+    // one driver per thread: tests never share a driver object, which is the first step to running them in parallel
+    private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
+
+    // Proton throttles repeated logins (a login per test made the suite fail after ~12 tests). Normal tests therefore
+    // share one Chrome profile: the first test signs in, the next ones start already signed in ("Keep me signed in").
+    // Tests about login/logout override useCleanSession() and get a brand new, signed out browser.
+    private static final String SESSION_PROFILE = new File("target/chrome-profile").getAbsolutePath();
+
     protected LoginPage lp;
     protected HomePage hp;
-    protected ComposeEmail ce;
+    protected ComposePage cp;
     protected InboxPage ip;
     protected SearchPage sp;
     protected FilterPage fp;
     protected ConfigReader config;
-    
+
+    protected String mailUrl;
     protected String username;
     protected String password;
     protected String email;
@@ -39,60 +46,53 @@ public class BaseTest {
     protected String incorrectPwd;
 
     @BeforeClass(alwaysRun = true)
-    public void loadCredentials() throws IOException {
+    public void loadConfig() throws IOException {
         config = new ConfigReader();
+        mailUrl = config.getProperty("proton.url", "https://account.proton.me/mail");
         username = config.getProperty("proton.username");
         password = config.getProperty("proton.password");
         email = config.getProperty("proton.email");
         recipient = config.getProperty("proton.recipient");
-        label = config.getProperty("proton.label");
-        incorrectPwd = config.getProperty("proton.incorrectPwd");
-
+        label = config.getProperty("proton.label", "p");
+        incorrectPwd = config.getProperty("proton.incorrectPwd", "wrong-password-123");
     }
+
     @BeforeMethod(alwaysRun = true)
-    public void setUp(){
-        driver = useCleanSession() ? createDriver() : createDriver(SESSION_PROFILE);
-        driver.get("https://account.proton.me/mail");
+    public void setUp() {
+        WebDriver driver = DriverFactory.createChrome(useCleanSession() ? null : SESSION_PROFILE);
+        DRIVER.set(driver);
+        driver.get(mailUrl);
         lp = new LoginPage(driver);
         hp = new HomePage(driver);
-        ce = new ComposeEmail(driver);
+        cp = new ComposePage(driver);
         ip = new InboxPage(driver);
         sp = new SearchPage(driver);
         fp = new FilterPage(driver);
-
     }
 
-    // Proton throttles repeated logins (a login per test made the suite fail after ~12 tests). Normal tests therefore
-    // share one Chrome profile: the first test signs in, the next ones start already signed in ("Keep me signed in").
-    // Tests about login/logout override this and get a brand new, signed out browser.
-    private static final String SESSION_PROFILE = new File("target/chrome-profile").getAbsolutePath();
+    public static WebDriver getDriver() {
+        return DRIVER.get();
+    }
 
-    protected boolean useCleanSession(){
+    protected boolean useCleanSession() {
         return false;
     }
 
-    protected WebDriver createDriver(){
-        return createDriver(null);
+    // a second, signed out browser, e.g. for the receiver in the two-account test
+    protected WebDriver newCleanBrowser() {
+        return DriverFactory.createChrome(null);
     }
 
-    // run with -Dheadless=true to run without opening the browser window
-    private WebDriver createDriver(String profileDir){
-        ChromeOptions options = new ChromeOptions();
-        if (profileDir != null) {
-            options.addArguments("--user-data-dir=" + profileDir);
-        }
-        if (Boolean.getBoolean("headless")) {
-            options.addArguments("--headless=new", "--window-size=1920,1080");
-        }
-        WebDriver webDriver = new ChromeDriver(options);
-        webDriver.manage().window().maximize();
-        return webDriver;
+    protected void openMailbox() {
+        getDriver().get(mailUrl);
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown(){
+    public void tearDown() {
+        WebDriver driver = DRIVER.get();
         if (driver != null) {
             driver.quit();
+            DRIVER.remove();
         }
     }
 }

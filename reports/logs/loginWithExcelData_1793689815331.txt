@@ -1,0 +1,2 @@
+url: https://mail.proton.me/u/1/inbox
+error: java.lang.AssertionError: Inbox expected: Account 1 - valid username and password expected [true] but found [false]

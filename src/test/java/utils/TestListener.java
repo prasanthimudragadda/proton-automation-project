@@ -9,33 +9,31 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import java.io.File;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
-// takes a screenshot whenever a test fails, saved in reports/screenshots
+// on every failure: screenshot in reports/screenshots and page URL + error in reports/logs (same file name)
+// runs before @AfterMethod, so the browser is still open on the failing page
 public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        WebDriver driver = ((BaseTest) result.getInstance()).driver;
+        WebDriver driver = BaseTest.getDriver();
         if (driver == null) {
             return;
         }
         String name = result.getName() + "_" + System.currentTimeMillis();
         try {
-            // page url and error text next to the screenshot help to debug CI failures
             String log = "url: " + driver.getCurrentUrl() + System.lineSeparator()
                     + "error: " + result.getThrowable() + System.lineSeparator();
             File logFile = new File("reports/logs/" + name + ".txt");
             FileUtils.forceMkdirParent(logFile);
-            FileUtils.writeStringToFile(logFile, log, java.nio.charset.StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        try {
+            FileUtils.writeStringToFile(logFile, log, StandardCharsets.UTF_8);
+
+            File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(src, new File("reports/screenshots/" + name + ".png"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            // evidence is best effort: never let it hide the real test failure
+            System.err.println("Could not save failure evidence for " + name + ": " + e);
         }
     }
 }

@@ -1,0 +1,2 @@
+url: https://mail.proton.me/login#selector=vaaqjuvqhqyisxcvhzmidkn4jbu46vnw&sk=4MOa-7kBWITx7JpVFYSTVLRPfnBCB0v93KHPHJRrnqo&v=2&state=q1rdzZzaIXhfRYcIBXoHr8fbI6eMOVef2w-Hgt08JcM&p=1&tr=1&pv=3&pt=default&source=0
+error: java.lang.AssertionError: Inbox should be shown after login expected [true] but found [false]

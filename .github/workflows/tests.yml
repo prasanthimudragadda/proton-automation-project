@@ -38,7 +38,7 @@ jobs:
 
       - name: HTML report
         if: always()
-        run: mvn -B surefire-report:report-only
+        run: mvn -B surefire-report:report-only site -DgenerateReports=false
 
       - name: Upload report and failure evidence
         if: always()
@@ -46,6 +46,6 @@ jobs:
         with:
           name: test-evidence
           path: |
-            target/site/surefire-report.html
+            target/reports/
             target/surefire-reports/
             reports/

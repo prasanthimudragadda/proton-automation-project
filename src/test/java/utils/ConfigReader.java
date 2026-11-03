@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class ConfigReader {
 
-     Properties prop = new Properties();
+    private final Properties prop = new Properties();
 
     public ConfigReader() throws IOException {
         // in CI there is no config.properties, all values come from environment variables
@@ -20,12 +20,18 @@ public class ConfigReader {
     }
 
     // an environment variable like PROTON_PASSWORD overrides the file value (useful for CI)
-    public String getProperty(String key){
+    public String getProperty(String key) {
         String fromEnv = System.getenv(key.replace('.', '_').toUpperCase());
         // GitHub Actions sets a variable to "" when its secret is missing, that must not hide the file value
         if (fromEnv != null && !fromEnv.isBlank()) {
             return fromEnv;
         }
-        return prop.getProperty(key);
+        String value = prop.getProperty(key);
+        return value == null ? null : value.trim();
+    }
+
+    public String getProperty(String key, String defaultValue) {
+        String value = getProperty(key);
+        return value == null || value.isEmpty() ? defaultValue : value;
     }
 }

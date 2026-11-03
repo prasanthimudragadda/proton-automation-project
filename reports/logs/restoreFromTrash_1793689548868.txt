@@ -1,0 +1,2 @@
+url: https://mail.proton.me/u/1/inbox#category=primary
+error: java.lang.IllegalStateException: 'Message sent.' toast did not appear for mail 'Inbox1793689527314'

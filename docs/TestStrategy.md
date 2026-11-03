@@ -25,7 +25,7 @@ Detailed test cases are in `docs/TestCases.csv` (46 cases, 27 automated test met
 ## 4. Priorities
 - P0 - Critical: login, send, draft, two-account delivery
 - P1 - High: inbox actions, labels, search, filters, attachments, undo send
-- P2 - Medium: restore, read/unread, bulk, date search
+- P2 - Medium: restore, read/unread, bulk, date search (manual)
 - P3 - Low: boundary and edge cases
 
 ## 5. Test levels and approach
@@ -52,7 +52,7 @@ Detailed test cases are in `docs/TestCases.csv` (46 cases, 27 automated test met
 
 ## 7. What is NOT automated and why
 - CC/BCC *visibility to the receivers* (BCC hidden) - needs 3 mailboxes. Only entering CC/BCC and keeping them in a draft is automated.
-- Scheduled send - custom time is a paid feature and real "tomorrow" scheduling cannot be waited for. Approach (implemented in `ScheduledSendTest`): only the *scheduled state* is automated with the free "Tomorrow" option (mail appears in Scheduled with the banner "will be sent", cancel moves it to Drafts and the Scheduled folder disappears). The actual delivery at 08:00 stays a manual check; a real delivery test would need a test environment with a fake clock or API. To test time-dependent logic without long tests, a test environment with a fake clock or API would be needed.
+- Scheduled send *delivery* - custom time is a paid feature and a mail scheduled for "Tomorrow" cannot be waited for in a test. What **is** automated (`ScheduledSendTest`): the scheduled *state* with the free "Tomorrow" option (mail is in Scheduled with the banner "will be sent"; cancel moves it to Drafts and the Scheduled folder disappears). The real delivery at 08:00 stays a manual check; testing it without a long test would need a test environment with a fake clock or an API to trigger the scheduler.
 - Password-protected email - needs a receiver opening an external link; better as exploratory test.
 - Date range search - date picker is brittle; low risk.
 - 2FA, CAPTCHA, rate limit - unstable and can lock the test account.
